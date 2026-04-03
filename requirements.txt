@@ -1,0 +1,11 @@
+torch
+transformers
+lime
+fastapi
+uvicorn
+pydantic
+pandas
+scikit-learn
+accelerate
+evaluate
+datasets

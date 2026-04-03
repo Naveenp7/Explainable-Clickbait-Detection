@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Clickbait Detector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+    
+    <div class="container glass-panel">
+        <header>
+            <h1>Explainable <span>Clickbait</span> Detection</h1>
+            <p>Paste a headline below to analyze its clickbait probability and understand why.</p>
+        </header>
+        
+        <main>
+            <div class="input-section">
+                <textarea id="headlineInput" placeholder="Enter headline here... (e.g., 'You won't believe what happened next!')"></textarea>
+                <button id="analyzeBtn" class="btn-primary">
+                    <span class="btn-text">Analyze Headline</span>
+                    <span class="loader hidden"></span>
+                </button>
+            </div>
+            
+            <div id="resultsSection" class="results-section hidden">
+                <div class="score-card">
+                    <h2>Detection Result</h2>
+                    <div class="result-badge" id="resultBadge">Processing...</div>
+                    <div class="confidence-meter">
+                        <canvas id="confidenceChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="explanation-card">
+                    <h2>AI Explanation (LIME)</h2>
+                    <p class="subtitle">Words highlighted in <span class="text-red">red</span> increase clickbait probability, <span class="text-green">green</span> decrease it.</p>
+                    <div id="highlightedText" class="highlighted-text"></div>
+                    
+                    <div id="limeChartContainer" class="lime-chart-container">
+                        <canvas id="limeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="errorSection" class="error-section hidden">
+                <p id="errorMessage"></p>
+            </div>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

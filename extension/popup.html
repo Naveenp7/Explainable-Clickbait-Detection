@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clickbait Settings</title>
+    <style>
+        html {
+            border-radius: 20px;
+            overflow: hidden;
+            background: transparent;
+        }
+        body { 
+            width: 330px; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #ffffff; 
+            color: #0f172a; 
+            margin: 0; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .container { padding: 20px; }
+        .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 20px; }
+        h2 { margin: 0; font-size: 1.25rem; font-weight: 800; color: #2563eb; }
+        .api-status { padding: 4px 10px; border-radius: 999px; font-size: 10px; font-weight: bold; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
+        .status-online { background: #dcfce7; color: #166534; }
+        .status-offline { background: #fee2e2; color: #991b1b; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; }
+        .status-online .dot { background: #166534; }
+        .status-offline .dot { background: #991b1b; }
+
+        .toggle-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; font-weight: 600; font-size: 0.9rem; }
+        
+        .quick-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #f8fafc; padding: 10px; border-radius: 18px; border: 1px solid #f1f5f9; text-align: center; }
+        .stat-val { display: block; font-size: 1.1rem; font-weight: 800; color: #2563eb; }
+        .stat-name { font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: bold; }
+
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: #2563eb; }
+        input:checked + .slider:before { transform: translateX(20px); }
+        
+        button { background: #3b82f6; color: white; border: none; padding: 12px 16px; border-radius: 30px; cursor: pointer; width: 100%; font-weight: bold; transition: background 0.2s ease; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2); }
+        button:hover { background: #2563eb; transform: translateY(-1px); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>AI Detector</h2>
+            <div id="apiStatus" class="api-status status-offline">
+                <span class="dot"></span>
+                <span id="statusText">Offline</span>
+            </div>
+        </div>
+
+        <div class="quick-stats">
+            <div class="stat-card">
+                <span id="statTotal" class="stat-val">0</span>
+                <span class="stat-name">Articles</span>
+            </div>
+            <div class="stat-card">
+                <span id="statClickbait" class="stat-val">0</span>
+                <span class="stat-name">Clickbait</span>
+            </div>
+        </div>
+
+        <div class="toggle-container">
+            <span>Enable Extension</span>
+            <label class="switch">
+                <input type="checkbox" id="toggleExt" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="toggle-container">
+            <span>Blur Clickbait</span>
+            <label class="switch">
+                <input type="checkbox" id="toggleBlur">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <button id="openAnalytics">View Wall of Shame</button>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
