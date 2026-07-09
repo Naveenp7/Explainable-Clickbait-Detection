@@ -1,51 +1,197 @@
-# Explainable Clickbait Detection System
+# Explainable Clickbait Detection 🎣🔍
 
-A complete full-stack AI system that detects clickbait headlines and provides word-level explanations using LIME (Local Interpretable Model-Agnostic Explanations).
+<div align="center">
+  <p><b>An Intelligent Browser and Web-Based Clickbait Analysis System</b></p>
+  <p><i>Utilizing machine learning to not only detect clickbait headlines but provide transparent, explainable insights into why a headline is manipulative.</i></p>
 
-## Features
-- **Accurate Detection**: Powered by a fine-tuned DistilBERT transformer running entirely locally.
-- **Explainable AI (XAI)**: Understand *why* an AI model made its prediction with visual heatmaps indicating word importance.
-- **Privacy-focused**: Runs computationally on your machine via FastAPI.
-- **Web App**: A premium web portal for manual headline testing with fluid UI and Chart.js integration.
-- **Browser Extension**: A Chrome extension that analyzes reading material in real-time, highlighting clickbait inline.
+  [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](#)
+  [![Scikit-Learn](https://img.shields.io/badge/Machine%20Learning-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](#)
+  [![Chrome Extension](https://img.shields.io/badge/Chrome_Extension-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white)](#)
+  [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](#)
+</div>
 
-## 0. Installation & Prerequisites
-Before setting up the model, ensure you have the necessary dependencies installed in your environment:
+<br />
 
-1.  **Clone/Download** this repository.
-2.  **Initialize your environment** (recommended):
-    ```bash
-    python -m venv .venv
-    .\.venv\Scripts\activate
-    ```
-3.  **Install Requirements**:
-    ```bash
-    pip install -r requirements.txt
-    ```
-*Note: This will install core libraries like `torch` (for AI processing), `transformers` (for the DistilBERT model), `fastapi` (for the backend), and `lime` (for explainability).*
+## 📑 Table of Contents
+1. [Overview](#-overview)
+2. [Key Features](#-key-features)
+3. [System Architecture](#-system-architecture)
+4. [Tech Stack](#-tech-stack)
+5. [Getting Started](#-getting-started)
+6. [Project Structure](#-project-structure)
+7. [Future Enhancements](#-future-enhancements)
 
-## 1. Local Model Setup & Training
-This system relies on highly localized, robust weights. You must first fine-tune the raw DistilBERT architecture onto your specific clickbait dataset!
-1. Ensure your Python virtual environment is active: `.\.venv\Scripts\activate`
-2. Place a CSV file containing your annotated training data into `model/clickbait_data.csv` (Must feature `headline` and `label` columns).
-3. Execute the fine-tuning script:
-```bash
-python model/train.py
+---
+
+## 📖 Overview
+The **Explainable Clickbait Detection** system is a multi-platform tool designed to protect users from sensationalist and misleading web content. Unlike standard black-box classifiers, this system emphasizes **Explainable AI (XAI)**, providing users with the exact linguistic triggers and patterns that flagged a headline as clickbait.
+
+The project features a lightweight Python backend for ML inference, a standalone web frontend, and a native Chrome Extension that analyzes web pages in real-time, complete with a built-in analytics dashboard to track your browsing safety.
+
+---
+
+## 🌟 Key Features
+
+* **🧠 Explainable ML Model:** Trained on `clickbait_data.csv`, the model (`train.py`) identifies sensationalist text and highlights the specific words or structural patterns responsible for the classification.
+* **🧩 Chrome Extension Integration:** Real-time web scanning. The extension features background processing, content scripts for DOM manipulation, and interactive popups.
+* **📊 Analytics Dashboard:** A dedicated analytics view (`analytics.html`, `chart.js`) within the extension to visualize historical clickbait exposure.
+* **🌐 Standalone Web Frontend:** A clean, decoupled web interface (`frontend/index.html`) allowing manual input and testing of headlines.
+* **📄 Automated Reporting:** Generate comprehensive analysis reports using `generate_report.py` and `create_algorithmic_sdd.py`.
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    %% Define Styles
+    classDef client fill:#1e1e1e,stroke:#4285F4,stroke-width:2px,color:#fff
+    classDef web fill:#1e1e1e,stroke:#F7DF1E,stroke-width:2px,color:#fff
+    classDef server fill:#1e1e1e,stroke:#3776AB,stroke-width:2px,color:#fff
+    classDef ml fill:#2a1b38,stroke:#F7931E,stroke-width:2px,color:#fff
+
+    subgraph Chrome_Extension ["Chrome Extension (Client)"]
+        Popup["Popup UI<br/>(popup.html / js)"]:::client
+        Content["Content Script<br/>(DOM Scanner)"]:::client
+        Background["Background Worker"]:::client
+        AnalyticsUI["Analytics Dashboard<br/>(Chart.js)"]:::client
+    end
+
+    subgraph Web_Application ["Web Frontend"]
+        WebUI["Web Interface<br/>(index.html & script.js)"]:::web
+    end
+
+    subgraph Backend_API ["Python Backend Server"]
+        API["REST API<br/>(app.py)"]:::server
+    end
+
+    subgraph Machine_Learning ["ML & Data Layer"]
+        Model["Trained Model Engine<br/>(test_model.py)"]:::ml
+        Explainer["XAI Explainer Module"]:::ml
+        Data[("Dataset<br/>(clickbait_data.csv)")]:::ml
+    end
+
+    %% Flow Dynamics
+    Content -->|Scraped Text| Background
+    Popup --> Background
+    AnalyticsUI --> Background
+    
+    WebUI -->|HTTP POST| API
+    Background -->|HTTP POST| API
+    
+    API --> Model
+    Model --> Explainer
+    Explainer -->|Clickbait Score & Explanation| API
+    
+    %% Training Pipeline (Offline)
+    Data -.->|Training via train.py| Model
+
 ```
-*This script tokenizes your data, loops through multiple epochs on your hardware, evaluates its accuracy metrics (F1/Precision/Recall), and exports the finalized checkpoint to the `local_model/` directory root.*
 
-## 2. Starting the Backend API
-Once your model finishes training and exports `.safetensors`, you can launch the inference API:
+---
+
+## 💻 Tech Stack
+
+### **Machine Learning & Backend**
+
+* **Language:** Python 3.x
+* **Server:** Flask / FastAPI (via `app.py`)
+* **Data Processing:** Pandas, NumPy (`clickbait_data.csv`)
+* **ML Pipeline:** Custom NLP classification algorithms (`model/train.py`)
+
+### **Frontend Interfaces**
+
+* **Chrome Extension:** Manifest V3, Vanilla JavaScript, HTML/CSS
+* **Web UI:** HTML5, CSS3 (`style.css`), JavaScript (`script.js`)
+* **Data Visualization:** Chart.js
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to run the detection system locally.
+
+### Prerequisites
+
+* Python 3.8+
+* Google Chrome (for the extension)
+
+### 1. Setup the Backend API
+
+1. **Clone the repository & navigate to the project:**
 ```bash
-uvicorn backend.app:app --host 0.0.0.0 --port 8000
+git clone [https://github.com/your-username/explainable-clickbait-detection.git](https://github.com/your-username/explainable-clickbait-detection.git)
+cd explainable-clickbait-detection
+
 ```
-*The `app.py` logic automatically detects and parses the `/local_model` checkpoint you just generated.*
 
-## 3. Web Application
-Simply open `frontend/index.html` in your web browser or utilize an IDE Live Server tool. You can freely type test headlines to observe Chart.js behavior and LIME heatmaps.
 
-## 4. Chrome Extension
-1. Open Chrome, Edge, or Brave and navigate to `chrome://extensions/`
-2. Enable the **Developer mode** toggle in the top right.
-3. Click **Load unpacked** and select the `/extension` directory located in this project.
-4. Browse any news aggregation site (Google News, Buzzfeed, etc.) and observe the tool dynamically checking titles against your personal AI model. Headlines determined as non-clickbait will be bordered in green, and clickbait in red! Hover over them for an analytical breakdown.
+2. **Install dependencies:**
+```bash
+pip install -r requirements.txt
+
+```
+
+
+3. **Start the Python server:**
+```bash
+cd backend
+python app.py
+
+```
+
+
+*Ensure the server is running on the expected port (e.g., localhost:5000) for the frontend clients to connect.*
+
+### 2. Setup the Chrome Extension
+
+1. Open Google Chrome and navigate to `chrome://extensions/`.
+2. Enable **Developer mode** (toggle in the top right).
+3. Click **Load unpacked** and select the `extension/` folder from this project.
+4. Pin the extension to your toolbar to access the `popup.html` and `analytics.html`.
+
+### 3. Run the Web Frontend
+
+Simply open the standalone web application by double-clicking `frontend/index.html` in your browser, or host it using a simple live server.
+
+---
+
+## 📁 Project Structure
+
+```text
+Explainable-Clickbait-Detection/
+├── backend/
+│   ├── app.py                   # Main API routing and server setup
+│   └── __pycache__/             # Compiled Python files
+├── extension/                   # Chrome Extension Source
+│   ├── manifest.json            # Extension configuration (Manifest V3)
+│   ├── background.js            # Service worker for API communication
+│   ├── content.js               # Scans DOM for headlines on active tabs
+│   ├── popup.html & popup.js    # Quick-access extension interface
+│   ├── analytics.html & .js     # Detailed browsing statistics
+│   ├── chart.js                 # Charting library for analytics
+│   └── style.css                # Extension styling
+├── frontend/                    # Standalone Web Application
+│   ├── index.html               # Web UI layout
+│   ├── script.js                # Frontend API consumption logic
+│   └── style.css                # Web UI styling
+├── model/
+│   └── train.py                 # ML model training and evaluation script
+├── clickbait_data.csv           # Main dataset for training/testing
+├── test_model.py                # Script to validate model accuracy
+├── generate_report.py           # Generates system performance reports
+├── create_algorithmic_sdd.py    # Generates software design documentation
+├── requirements.txt             # Python backend dependencies
+└── README.md
+
+```
+
+---
+
+## 🔮 Future Enhancements
+
+* **Multi-Lingual Support:** Expand the NLP model to detect clickbait patterns in languages other than English.
+* **Social Media Integration:** Develop specific content scripts optimized for infinite-scrolling feeds like X (Twitter), Facebook, and Reddit.
+* **Crowdsourced Feedback:** Add a feature in the Chrome extension popup allowing users to report false positives/negatives, continuously improving the dataset.
+
+---
